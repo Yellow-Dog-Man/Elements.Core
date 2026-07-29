@@ -1,12 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <LangVersion>11</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseNoTokens|AnyCPU'">
-    <OutputPath>bin\ReleaseNoTokens\</OutputPath>
-    <Optimize>true</Optimize>
-  </PropertyGroup>
-  <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -15,7 +8,6 @@
     <PackageReference Include="MSTest" Version="4.2.3" />
     <PackageReference Include="MSTest.TestAdapter" Version="4.2.3" />
     <PackageReference Include="MSTest.TestFramework" Version="4.2.3" />
-    <PackageReference Include="System.ValueTuple" Version="4.6.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Elements.Core\Elements.Core.csproj" />

@@ -37,7 +37,7 @@ namespace Elements.Core
             this.field = field;
         }
 
-        public Type MemberType => field.FieldType;
+        public Type MemberType => this.field.FieldType;
 
         public object GetValue(object current) => field.GetValue(current);
 

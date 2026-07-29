@@ -5,35 +5,8 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 
     <PackageId>YellowDogMan.Elements.Core</PackageId>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>11</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DefineConstants></DefineConstants>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>11</LangVersion>
-    <DocumentationFile>bin\Release\Elements.Core.xml</DocumentationFile>
-    <NoWarn>CS0649, CS1591</NoWarn>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseProfile|AnyCPU'">
-    <OutputPath>bin\ReleaseProfile\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
-    <NoWarn>CS0649, CS1591</NoWarn>
-    <LangVersion>11</LangVersion>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>PROFILE</DefineConstants>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Remove="Animation\**" />
-    <Compile Remove="Modifiers\**" />
-    <EmbeddedResource Remove="Animation\**" />
-    <EmbeddedResource Remove="Modifiers\**" />
-    <None Remove="Animation\**" />
-    <None Remove="Modifiers\**" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Update="Data Types\HalfVectors.cs">
       <DesignTime>True</DesignTime>
@@ -115,8 +88,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PrimitiveTryParsers.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Extensions\MathXDivision.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>MathXDivision.cs</LastGenOutput>
@@ -179,12 +150,25 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>PrimitiveTryParsers.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="RecyclableMemoryStream\" />
+    <!--These 4 are unlike the others, they should probably get figured out.-->
+    <None Include="Data Types\HalfVectors.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HalfVectors.tt</DependentUpon>
+    </None>
+    <None Include="Data Types\SphericalHarmonics\SphericalHarmonics.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SphericalHarmonics.tt</DependentUpon>
+    </None>
+    <None Update="Data Types\HalfVectors.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>HalfVectors.cs</LastGenOutput>
+    </None>
+    <None Update="Data Types\SphericalHarmonics\SphericalHarmonics.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SphericalHarmonics.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeGenerationConfig\CodeGenerationConfig.csproj" />
@@ -197,69 +181,9 @@
     <PackageReference Include="LinqFaster.SIMD" Version="1.0.3" />
     <PackageReference Include="LinqFaster.SIMD.Parallel" Version="1.0.2" />
     <PackageReference Include="LZMA-SDK" Version="22.1.1" />
-    <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="10.0.9" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Microsoft.NETCore.Platforms" Version="7.0.4" />
-    <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
-    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
     <PackageReference Include="Otp.NET" Version="1.4.1" />
-    <PackageReference Include="System.AppContext" Version="4.3.0" />
-    <PackageReference Include="System.Buffers" Version="4.6.1" />
-    <PackageReference Include="System.CodeDom" Version="10.0.9" />
-    <PackageReference Include="System.Collections" Version="4.3.0" />
-    <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="10.0.9" />
-    <PackageReference Include="System.Console" Version="4.3.1" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Diagnostics.Debug" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.DiagnosticSource" Version="10.0.9" />
-    <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="10.0.9" />
-    <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-    <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
-    <PackageReference Include="System.Globalization" Version="4.3.0" />
-    <PackageReference Include="System.Globalization.Calendars" Version="4.3.0" />
-    <PackageReference Include="System.IO" Version="4.3.0" />
-    <PackageReference Include="System.IO.Compression" Version="4.3.0" />
-    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem" Version="4.3.0" />
-    <PackageReference Include="System.IO.FileSystem.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Linq" Version="4.3.0" />
-    <PackageReference Include="System.Linq.Expressions" Version="4.3.0" />
-    <PackageReference Include="System.Management" Version="8.0.0" />
-    <PackageReference Include="System.Management" Version="10.0.9" />
-    <PackageReference Include="System.Memory" Version="4.6.3" />
-    <PackageReference Include="System.Net.Primitives" Version="4.3.1" />
-    <PackageReference Include="System.Net.Sockets" Version="4.3.0" />
-    <PackageReference Include="System.Numerics.Vectors" Version="4.6.1" />
-    <PackageReference Include="System.ObjectModel" Version="4.3.0" />
-    <PackageReference Include="System.Reflection" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Resources.ResourceManager" Version="4.3.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
-    <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
-    <PackageReference Include="System.Runtime.Handles" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-    <PackageReference Include="System.Runtime.InteropServices.RuntimeInformation" Version="4.3.0" />
-    <PackageReference Include="System.Security.AccessControl" Version="6.0.1" />
-    <PackageReference Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
-    <PackageReference Include="System.Security.Cryptography.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.Primitives" Version="4.3.0" />
-    <PackageReference Include="System.Security.Cryptography.X509Certificates" Version="4.3.2" />
-    <PackageReference Include="System.Security.Principal.Windows" Version="5.0.0" />
-    <PackageReference Include="System.Text.Encoding" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encoding.Extensions" Version="4.3.0" />
-    <PackageReference Include="System.Text.Encodings.Web" Version="10.0.9" />
-    <PackageReference Include="System.Text.Json" Version="10.0.9" />
-    <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="System.ValueTuple" Version="4.6.2" />
-    <PackageReference Include="System.Xml.ReaderWriter" Version="4.3.1" />
-    <PackageReference Include="System.Xml.XDocument" Version="4.3.0" />
     <PackageReference Include="YellowDogMan.Brotli.NET" Version="2.1.1-ydm-0.2.3" />
     <PackageReference Include="YellowDogMan.BepuPhysics" Version="2.4.0.2-ydm-0.1.7" />
     <PackageReference Include="YellowDogMan.Elements.Data" Version="1.0.0" />
@@ -268,27 +192,4 @@
     <PackageReference Include="YellowDogMan.MimeDetective" Version="0.3.0" />
     <PackageReference Include="YellowDogMan.Renderite.Shared" Version="1.1.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Data Types\HalfVectors.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>HalfVectors.tt</DependentUpon>
-    </None>
-    <None Include="Data Types\SphericalHarmonics\SphericalHarmonics.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>SphericalHarmonics.tt</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="Data Types\HalfVectors.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>HalfVectors.cs</LastGenOutput>
-    </None>
-    <None Update="Data Types\SphericalHarmonics\SphericalHarmonics.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>SphericalHarmonics.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <PropertyGroup />
 </Project>
