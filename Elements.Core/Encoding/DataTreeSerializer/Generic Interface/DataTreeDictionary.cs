@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Elements.Core
 {
-    public partial class DataTreeDictionary : DataTreeNode
+    public partial class DataTreeDictionary : DataTreeNode, IEnumerable<KeyValuePair<string, DataTreeNode>>
     {
         public override IEnumerable<DataTreeNode> EnumerateTree()
         {
@@ -120,6 +121,10 @@ namespace Elements.Core
                 throw new Exception("Dictionary doesn't contain key: " + key);
             }
         }
+
+        public IEnumerator<KeyValuePair<string, DataTreeNode>> GetEnumerator() => Children.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public override string ToString()
         {
