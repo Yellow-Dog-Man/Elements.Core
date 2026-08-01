@@ -8,14 +8,7 @@ namespace Elements.Core
 {
     public partial class DataTreeDictionary : DataTreeNode, IEnumerable<KeyValuePair<string, DataTreeNode>>
     {
-        public override IEnumerable<DataTreeNode> EnumerateTree()
-        {
-            yield return this;
-
-            foreach (var child in Children)
-                foreach (var childNode in child.Value.EnumerateTree())
-                    yield return childNode;
-        }
+        protected override IEnumerable<DataTreeNode> DirectChildren() => Children.Count > 0 ? Children.Values : null;
 
         public Dictionary<string, DataTreeNode> Children { get; private set; }
 
