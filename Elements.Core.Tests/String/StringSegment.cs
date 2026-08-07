@@ -27,7 +27,7 @@
         [DataRow(5, "abcde", "fg")]
         [DataRow(6, "abcdef", "g")]
         [DataRow(7, "abcdefg", "")]
-        [DataTestMethod]
+        [TestMethod]
         public void TestSplit(int index, string leftExpected, string rightExpected)
         {
             var segment = new StringSegment(" abcdefg ");
@@ -44,7 +44,7 @@
         [DataRow("+")]
         [DataRow("AND")]
         [DataRow(" --> ")]
-        [DataTestMethod]
+        [TestMethod]
         public void TestSplitAround(string separator)
         {
             const string A = "Potatoes";
@@ -93,6 +93,50 @@
             var actual = segment.LastIndexOf(SUBSTRING);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void TestHashCodeIsContentBased()
+        {
+            // The same text reached through two different backing strings has to hash
+            // identically, otherwise segments cannot be used as keys.
+            var whole = new StringSegment("hello");
+            var sliced = new StringSegment("xxhelloxx", 2, 5);
+
+            Assert.AreEqual("hello", sliced.ToString(), "Sanity check on the segment");
+            Assert.AreEqual(whole.GetHashCode(), sliced.GetHashCode(), "Same content, different backing strings");
+        }
+
+        [TestMethod]
+        public void TestHashCodeMatchesEquivalentString()
+        {
+            // Segments hash ordinally, the same way the equivalent string does, so the
+            // two can share a hash based lookup.
+            const string text = "Potatoes";
+
+            var segment = new StringSegment($"  {text}  ").Trim();
+
+            Assert.AreEqual(text.GetHashCode(), segment.GetHashCode(), "Segment against the equivalent string");
+        }
+
+        [TestMethod]
+        public void TestEmptySegmentsShareHashCode()
+        {
+            var empty = StringSegment.Empty;
+            var emptyString = new StringSegment("");
+            var slicedEmpty = new StringSegment("abc", 1, 0);
+
+            Assert.AreEqual(empty.GetHashCode(), emptyString.GetHashCode(), "Default against an empty string");
+            Assert.AreEqual(empty.GetHashCode(), slicedEmpty.GetHashCode(), "Default against a zero length slice");
+        }
+
+        [TestMethod]
+        public void TestDifferentContentHashesDiffer()
+        {
+            var a = new StringSegment("Potatoes");
+            var b = new StringSegment("Mayo");
+
+            Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode(), "Distinct content should not collide");
         }
     }
 }
