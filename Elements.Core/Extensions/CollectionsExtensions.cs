@@ -8,7 +8,7 @@ namespace Elements.Core
 {
     public static class CollectionsExtensions
     {
-        public static bool ElementWiseEquals<T>(this IList<T> list, IList<T> other)
+        public static bool ElementWiseEquals<T>(this IReadOnlyList<T> list, IReadOnlyList<T> other)
             where T : IEquatable<T>
         {
             if (list == null && other == null)
@@ -58,7 +58,7 @@ namespace Elements.Core
             return false;
         }
 
-        public static T GetOrNull<T>(this IList<T> list, int index)
+        public static T GetOrNull<T>(this IReadOnlyList<T> list, int index)
             where T : class
         {
             if (list.Count <= index)
@@ -67,13 +67,13 @@ namespace Elements.Core
                 return list[index];
         }
 
-        public static T GetRandom<T>(this IList<T> list, RandomXGenerator randomSource = null)
+        public static T GetRandom<T>(this IReadOnlyList<T> list, RandomXGenerator randomSource = null)
         {
             int index = randomSource?.Range(0, list.Count) ?? RandomX.Range(0, list.Count);
             return list[index];
         }
 
-        public static T GetRandomWithWeight<T>(this IList<T> list, Func<T, float> weightGetter)
+        public static T GetRandomWithWeight<T>(this IReadOnlyList<T> list, Func<T, float> weightGetter)
         {
             float sum = 0;
 
@@ -122,12 +122,12 @@ namespace Elements.Core
             return t;
         }
 
-        public static T GetFirst<T>(this IList<T> list)
+        public static T GetFirst<T>(this IReadOnlyList<T> list)
         {
             return list[0];
         }
 
-        public static T GetLast<T>(this IList<T> list)
+        public static T GetLast<T>(this IReadOnlyList<T> list)
         {
             return list[list.Count - 1];
         }
@@ -216,7 +216,7 @@ namespace Elements.Core
             list.EnsureCapacity(list.Count + newElementCount);
         }
 
-        public static int FindIndex<T>(this IList<T> list, Predicate<T> predicate)
+        public static int FindIndex<T>(this IReadOnlyList<T> list, Predicate<T> predicate)
         {
             for (int i = 0; i < list.Count; i++)
                 if (predicate(list[i]))
