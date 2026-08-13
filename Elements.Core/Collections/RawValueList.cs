@@ -10,7 +10,7 @@ namespace Elements.Core
     /// No-frills list that wraps an accessible array.
     ///</summary>
     ///<typeparam name="T">Type of elements contained by the list.</typeparam>
-    public class RawValueList<T> : IList<T>
+    public class RawValueList<T> : IList<T>, IReadOnlyList<T>
         where T : struct
     {
         ///<summary>
