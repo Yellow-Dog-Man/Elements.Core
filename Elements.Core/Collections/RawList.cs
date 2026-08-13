@@ -9,7 +9,7 @@ namespace Elements.Core
     /// No-frills list that wraps an accessible array.
     ///</summary>
     ///<typeparam name="T">Type of elements contained by the list.</typeparam>
-    public class RawList<T> : IList<T>
+    public class RawList<T> : IList<T>, IReadOnlyList<T>
     {
         ///<summary>
         /// Direct access to the elements owned by the raw list.
