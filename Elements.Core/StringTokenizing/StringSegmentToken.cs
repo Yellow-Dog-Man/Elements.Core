@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Elements.Core
@@ -64,6 +62,8 @@ namespace Elements.Core
             }
         }
 
+        public ReadOnlySpan<char> AsSpan() => WholeString.AsSpan(StartIndex, Length);
+
         public StringSegmentToken SubSegment(int startIndex)
         {
             return SubSegment(startIndex, Length - startIndex);
@@ -123,8 +123,8 @@ namespace Elements.Core
 
             // length equals, but they are either different whole strings or different parts
             // perform a comparison of the actual substring
-            return string.Compare(this.WholeString, this.StartIndex, other.WholeString, other.StartIndex, Length)
-                == 0;
+            return string.CompareOrdinal(this.WholeString, this.StartIndex, other.WholeString, other.StartIndex, Length)
+                   == 0;
         }
 
         public override bool Equals(object obj)
@@ -149,6 +149,8 @@ namespace Elements.Core
         {
             return !(a == b);
         }
+
+        public override int GetHashCode() => string.GetHashCode(AsSpan());
     }
 
     public static class StringSegmentTokenExtensions
