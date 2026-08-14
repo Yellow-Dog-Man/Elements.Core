@@ -1,20 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace Elements.Core
 {
-    public partial class DataTreeDictionary : DataTreeNode
+    public partial class DataTreeDictionary : DataTreeNode, IEnumerable<KeyValuePair<string, DataTreeNode>>
     {
-        public override IEnumerable<DataTreeNode> EnumerateTree()
-        {
-            yield return this;
-
-            foreach (var child in Children)
-                foreach (var childNode in child.Value.EnumerateTree())
-                    yield return childNode;
-        }
+        protected override IEnumerable<DataTreeNode> DirectChildren() => Children.Count > 0 ? Children.Values : null;
 
         public Dictionary<string, DataTreeNode> Children { get; private set; }
 
@@ -44,11 +38,12 @@ namespace Elements.Core
         // Extracts a value or returns a default value
         public bool TryExtract<T>(string key, ref T value)
         {
-            if(Children.TryGetValue(key, out DataTreeNode node))
+            if (Children.TryGetValue(key, out DataTreeNode node))
             {
                 value = ExtractValue<T>(node);
                 return true;
             }
+
             return false;
         }
 
@@ -88,7 +83,7 @@ namespace Elements.Core
 
         public DataTreeList TryGetList(string key)
         {
-            if(Children.TryGetValue(key, out var node))
+            if (Children.TryGetValue(key, out var node))
             {
                 if (node is DataTreeList list)
                     return list;
@@ -120,6 +115,10 @@ namespace Elements.Core
                 throw new Exception("Dictionary doesn't contain key: " + key);
             }
         }
+
+        public IEnumerator<KeyValuePair<string, DataTreeNode>> GetEnumerator() => Children.GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public override string ToString()
         {
