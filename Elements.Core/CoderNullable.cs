@@ -40,7 +40,7 @@ namespace Elements.Core
             if (a.HasValue != b.HasValue)
                 return false;
             if (!a.HasValue)
-                return false;
+                return true;
 
             return Coder<T>.Equals(a.Value, b.Value);
         }
