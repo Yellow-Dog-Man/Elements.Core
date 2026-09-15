@@ -470,10 +470,10 @@ namespace Elements.Core
 
 						Encoder<<#=dec#>> <#=name#>Enc = (v,bw) =>
 						{
-							// TODO!!! Add better null coding (store it in the string length)
 							<#if(dec == "string")
 							{
 								#>
+								// TODO!!! Add better null coding (store it in the string length)
 								if(v == null)
 									bw.Write(false);
 								else
@@ -482,6 +482,14 @@ namespace Elements.Core
 									bw.Write(v);
 								}
 								<#									
+							}
+							else if(dec == "char")
+							{
+								#>
+								// IMPORTANT!!! BinaryWriter doesn't support encoding surrogate pair characters individually
+								// For this reason we have to encode their raw integer values and then reconstruct back on the other end
+								bw.Write((ushort)v);
+								<#
 							}
 							else
 							{
@@ -499,6 +507,14 @@ namespace Elements.Core
 								#>
 								bool isNull = !br.ReadBoolean();
 								return isNull ? null : br.ReadString();
+								<#
+							}
+							else if(dec == "char")
+							{
+								#>
+								// IMPORTANT!!! BinaryWriter doesn't support encoding surrogate pair characters individually
+								// For this reason we have to decode it as encoded ushort and then convert back
+								return (char)br.ReadUInt16();
 								<#
 							}
 							else
