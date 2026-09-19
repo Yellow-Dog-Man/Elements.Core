@@ -19,5 +19,7 @@ namespace Elements.Core
 
         public static bool operator ==(RigidTransform a, RigidTransform b) => a.Equals(b);
         public static bool operator !=(RigidTransform a, RigidTransform b) => !a.Equals(b);
+        public override bool Equals(object obj) => obj is RigidTransform other && Equals(other);
+        public override int GetHashCode() => HashCode.Combine(position, rotation);
     }
 }
