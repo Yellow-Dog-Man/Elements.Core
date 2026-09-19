@@ -8,14 +8,7 @@ namespace Elements.Core
 {
     public class DataTreeList : DataTreeNode, IEnumerable<DataTreeNode>
     {
-        public override IEnumerable<DataTreeNode> EnumerateTree()
-        {
-            yield return this;
-
-            foreach (var child in Children)
-                foreach (var childNode in child.EnumerateTree())
-                    yield return childNode;
-        }
+        protected override IEnumerable<DataTreeNode> DirectChildren() => Children.Count > 0 ? Children : null;
 
         public int Count => Children.Count;
 
