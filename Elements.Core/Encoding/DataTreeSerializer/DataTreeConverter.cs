@@ -38,17 +38,17 @@ namespace Elements.Core
 
         public enum Compression
         {
-            None,
-            LZ4,
-            LZMA,
-            Brotli,
+            None = 0,
+            LZ4 = 1,
+            LZMA = 2,
+            Brotli = 3,
         }
 
         public static bool IsSupportedFormat(string file)
         {
             var ext = Path.GetExtension(file).ToLower();
 
-            return ext == ".7zbson" || ext == ".lz4bson" || ext == ".brson" || ext == "frdt";
+            return ext == ".7zbson" || ext == ".lz4bson" || ext == ".brson";
         }
 
         public static DataTreeDictionary Load(string file, Uri uri)
