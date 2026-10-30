@@ -189,6 +189,8 @@ namespace Elements.Core
         public bool Equals(string other, StringComparison comparison) =>
             AsSpan().Equals(other.AsSpan(), comparison);
 
+        public override int GetHashCode() => string.GetHashCode(AsSpan());
+
         public override string ToString()
         {
             // When it's empty, always return empty string, rather than null. This way we do not

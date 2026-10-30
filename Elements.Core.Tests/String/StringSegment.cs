@@ -3,6 +3,12 @@
     [TestClass]
     public class StringSegmentTests
     {
+        const string POTATOES = "Potatoes";
+
+        // Four characters long, so it doubles as the offset of POTATOES when the two are
+        // concatenated.
+        const string MAYO = "Mayo";
+
         [TestMethod]
         public void TestTrim()
         {
@@ -27,7 +33,7 @@
         [DataRow(5, "abcde", "fg")]
         [DataRow(6, "abcdef", "g")]
         [DataRow(7, "abcdefg", "")]
-        [DataTestMethod]
+        [TestMethod]
         public void TestSplit(int index, string leftExpected, string rightExpected)
         {
             var segment = new StringSegment(" abcdefg ");
@@ -44,7 +50,7 @@
         [DataRow("+")]
         [DataRow("AND")]
         [DataRow(" --> ")]
-        [DataTestMethod]
+        [TestMethod]
         public void TestSplitAround(string separator)
         {
             const string A = "Potatoes";
@@ -93,6 +99,58 @@
             var actual = segment.LastIndexOf(SUBSTRING);
 
             Assert.AreEqual(expected, actual);
+        }
+
+        // Segments hash ordinally, the same way the equivalent string does, so the two can
+        // share a hash based lookup.
+        [DataRow(POTATOES, POTATOES, 0, DisplayName = "Whole string")]
+        [DataRow(POTATOES, "  " + POTATOES + "  ", 2, DisplayName = "Slice out of a padded string")]
+        [DataRow("", "", 0, DisplayName = "Empty string")]
+        [DataRow("", POTATOES, 1, DisplayName = "Zero length slice")]
+        [TestMethod]
+        public void GetHashCode_Segment_MatchesTheEquivalentString(string expectedContent, string backingString, int offset)
+        {
+            var segment = new StringSegment(backingString, offset, expectedContent.Length);
+
+            var actual = segment.GetHashCode();
+
+            Assert.AreEqual(expectedContent.GetHashCode(), actual);
+        }
+
+        [TestMethod]
+        public void GetHashCode_DefaultSegment_MatchesTheEmptyString()
+        {
+            var segment = StringSegment.Empty;
+
+            var actual = segment.GetHashCode();
+
+            Assert.AreEqual(string.Empty.GetHashCode(), actual);
+        }
+
+        // The same text reached through two different backing strings has to hash
+        // identically, otherwise segments cannot be used as keys.
+        [DataRow(POTATOES, "  " + POTATOES + "  ", 2, DisplayName = "Slice out of a padded string")]
+        [DataRow(POTATOES, POTATOES + MAYO, 0, DisplayName = "Slice off the start of a longer string")]
+        [DataRow(POTATOES, MAYO + POTATOES, 4, DisplayName = "Slice off the end of a longer string")]
+        [TestMethod]
+        public void GetHashCode_SegmentsWithTheSameContent_ReturnsTheSameValue(string content, string backingString, int offset)
+        {
+            var whole = new StringSegment(content);
+            var sliced = new StringSegment(backingString, offset, content.Length);
+
+            Assert.AreEqual(whole.GetHashCode(), sliced.GetHashCode());
+        }
+
+        [DataRow(POTATOES, MAYO, DisplayName = "Unrelated content")]
+        [DataRow(POTATOES, "potatoes", DisplayName = "Differing only in case")]
+        [DataRow(POTATOES, "Potato", DisplayName = "Prefix of the other")]
+        [TestMethod]
+        public void GetHashCode_SegmentsWithDifferentContent_ReturnsDifferentValues(string left, string right)
+        {
+            var a = new StringSegment(left);
+            var b = new StringSegment(right);
+
+            Assert.AreNotEqual(a.GetHashCode(), b.GetHashCode());
         }
     }
 }
