@@ -7,32 +7,13 @@ using Newtonsoft.Json.Bson;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using SevenZip;
+using System.IO.Compression;
 using LZ4;
-using BrotliSharpLib;
-using System.ComponentModel.Design.Serialization;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace Elements.Core
 {
     public static class DataTreeConverter
     {
-        public static readonly bool NativeBrotliSupported;
-
-        static DataTreeConverter()
-        {
-            try
-            {
-                var version = Brotli.Brolib.BrotliDecoderVersion();
-                version = Brotli.Brolib.BrotliEncoderVersion();
-
-                NativeBrotliSupported = true;
-            }
-            catch(Exception ex)
-            {
-                UniLog.Warning($"Exception from calling native Brotli methods:\n{ex}");
-            }
-        }
-
         public const string HEADER = "FrDT";
         public const int VERSION = 0;
 
@@ -211,37 +192,17 @@ namespace Elements.Core
 
         public static DataTreeDictionary FromRawBRSON(Stream stream)
         {
-            // The managed implementation is actually faster at the decompressing than the native one, so just use that instead
-            if (NativeBrotliSupported)
+            using (var memstream = new MemoryStream())
             {
-                using (var memstream = new MemoryStream())
+                using (var bs = new BrotliStream(stream, CompressionMode.Decompress, true))
+                    bs.CopyTo(memstream);
+
+                memstream.Seek(0, SeekOrigin.Begin);
+
+                using (var bson = new BsonDataReader(memstream))
                 {
-                    Brotli.BrotliExtensions.DecompressFromBrotli(stream, memstream);
-
-                    memstream.Seek(0, SeekOrigin.Begin);
-
-                    using (var bson = new BsonDataReader(memstream))
-                    {
-                        bson.CloseInput = false;
-                        return (DataTreeDictionary)Read(bson);
-                    }
-                }
-            }
-            else
-            {
-                // Use managed implementation as a backup
-                using (var memstream = new MemoryStream())
-                {
-                    using (var bs = new BrotliStream(stream, System.IO.Compression.CompressionMode.Decompress, true))
-                        bs.CopyTo(memstream);
-
-                    memstream.Seek(0, SeekOrigin.Begin);
-
-                    using (var bson = new BsonDataReader(memstream))
-                    {
-                        bson.CloseInput = false;
-                        return (DataTreeDictionary)Read(bson);
-                    }
+                    bson.CloseInput = false;
+                    return (DataTreeDictionary)Read(bson);
                 }
             }
         }
@@ -302,37 +263,20 @@ namespace Elements.Core
         {
             WriteHeader(stream, Compression.Brotli);
 
-            if(NativeBrotliSupported)
+            using (var memstream = new MemoryStream())
+            using (var bson = new BsonDataWriter(memstream))
             {
-                using (var memstream = new MemoryStream())
-                using (var bson = new BsonDataWriter(memstream))
+                bson.CloseOutput = false;
+                Write(root, bson);
+
+                memstream.Seek(0, SeekOrigin.Begin);
+
+                using (var bs = new BrotliStream(stream, new BrotliCompressionOptions()
                 {
-                    bson.CloseOutput = false;
-                    Write(root, bson);
-
-                    memstream.Seek(0, SeekOrigin.Begin);
-
-                    Brotli.BrotliExtensions.CompressToBrotli(memstream, stream, (uint)quality, 16);
-                }
-            }
-            else
-            {
-                // Use C# implementation as a fallback
-                using (var memstream = new MemoryStream())
-                using (var bson = new BsonDataWriter(memstream))
+                    Quality = quality,
+                }, true))
                 {
-                    bson.CloseOutput = false;
-                    Write(root, bson);
-
-                    memstream.Seek(0, SeekOrigin.Begin);
-
-                    using (var bs = new BrotliStream(stream, System.IO.Compression.CompressionMode.Compress, true))
-                    {
-                        bs.SetQuality(quality);
-                        bs.SetWindow(16);
-
-                        memstream.CopyTo(bs);
-                    }
+                    memstream.CopyTo(bs);
                 }
             }
         }
