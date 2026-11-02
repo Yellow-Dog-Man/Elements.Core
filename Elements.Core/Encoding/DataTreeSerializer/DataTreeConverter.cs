@@ -290,7 +290,7 @@ namespace Elements.Core
         {
             WriteHeader(stream, Compression.LZ4);
 
-            using (var lz = new LZ4Stream(stream, LZ4StreamMode.Compress, LZ4StreamFlags.HighCompression))
+            using (var lz = new LZ4Stream(stream, LZ4StreamMode.Compress, LZ4StreamFlags.HighCompression | LZ4StreamFlags.IsolateInnerStream))
             using (var bson = new BsonDataWriter(lz))
             {
                 bson.CloseOutput = false;
