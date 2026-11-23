@@ -1100,6 +1100,12 @@ public static partial class MathX
     }
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public static bool IsBetween(this <#=vectortype#> value, in <#=vectortype#> from, in <#=vectortype#> to)
+	{
+		return <#=H.FormatElements(elements, "value.{0}.IsBetween(from.{0}, to.{0})", "&&")#>;
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	public static bool Approximately(in <#=vectortype#> a, in <#=vectortype#> b)
 	{
 		return <#=H.FormatElements(elements, "MathX.Approximately(a.{0}, b.{0})", "&&")#>;
@@ -1425,12 +1431,6 @@ public static partial class MathX
 			<#
 			}
 			#>
-
-			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			public static bool IsBetween(this <#=vectortype#> value, in <#=vectortype#> from, in <#=vectortype#> to)
-			{
-				return <#=H.FormatElements(elements, "value.{0}.IsBetween(from.{0}, to.{0})", "&&")#>;
-			}
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			public static <#=vectortype#> Lerp(in <#=vectortype#> from, in <#=vectortype#> to, <#=basetype#> t)

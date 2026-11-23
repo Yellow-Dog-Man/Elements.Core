@@ -1823,35 +1823,6 @@ namespace Elements.Core
 
         #endregion
 
-        public static bool IsBetween(this float v, float from, float to)
-        {
-            return v >= from && v <= to;
-        }
-
-        public static bool IsBetween(this int v, int from, int to)
-        {
-            return v >= from && v <= to;
-        }
-
-        public static bool IsBetween(this double v, double from, double to)
-        {
-            return v >= from && v <= to;
-        }
-
-        public static bool IsBetween(this DateTime v, DateTime from, DateTime to)
-        {
-            return v >= from && v <= to;
-        }
-
-        public static bool IsBetween(this TimeSpan v, TimeSpan from, TimeSpan to)
-        {
-            return v >= from && v <= to;
-        }
-
-        /*public static bool IsBetween(this float2 value, float2 from, float2 to)
-        {
-            return value.x.IsBetween(from.x, to.x) && value.y.IsBetween(from.y, to.y);
-        }*/
 
         public static bool DoIntervalsIntersect(int start0, int end0, int start1, int end1)
         {
