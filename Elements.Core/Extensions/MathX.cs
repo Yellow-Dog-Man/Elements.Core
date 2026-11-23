@@ -1823,6 +1823,9 @@ namespace Elements.Core
 
         #endregion
 
+        public static bool IsBetween(this DateTime v, DateTime from, DateTime to) => v >= from && v <= to;
+        public static bool IsBetween(this TimeSpan v, TimeSpan from, TimeSpan to) => v >= from && v <= to;
+
 
         public static bool DoIntervalsIntersect(int start0, int end0, int start1, int end1)
         {
