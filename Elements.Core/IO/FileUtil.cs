@@ -68,7 +68,7 @@ namespace Elements.Core
                 }
                 catch (Exception ex)
                 {
-                    await Task.Delay(delay).ConfigureAwait(false);
+                    await Task.Delay(delay);
 
                     delay *= 2;
 
@@ -200,7 +200,7 @@ namespace Elements.Core
                 }
                 catch (Exception ex)
                 {
-                    await Task.Delay(delay).ConfigureAwait(false);
+                    await Task.Delay(delay);
 
                     delay *= 2;
 

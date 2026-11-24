@@ -59,12 +59,12 @@ namespace Elements.Core
                 }
             }
 
-            return await task.Task.ConfigureAwait(false);
+            return await task.Task;
         }
 
         async Task SendBatch()
         {
-            await Task.WhenAny(immediateDispatch.Task, Task.Delay(TimeSpan.FromSeconds(DelaySeconds))).ConfigureAwait(false);
+            await Task.WhenAny(immediateDispatch.Task, Task.Delay(TimeSpan.FromSeconds(DelaySeconds)));
 
             var toSend = Pool.BorrowList<QueryResult>();
 
@@ -81,7 +81,7 @@ namespace Elements.Core
             }
 
             if (toSend.Count > 0)
-                await RunBatch(toSend).ConfigureAwait(false);
+                await RunBatch(toSend);
 
             // distribute the finished queries
             lock(_lock)
