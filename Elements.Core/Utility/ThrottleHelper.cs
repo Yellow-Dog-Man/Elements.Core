@@ -29,7 +29,7 @@ public static class ThrottleHelper
         while (true)
         {
             // Attempt the operation
-            if (await func().ConfigureAwait(false))
+            if (await func())
                 return true;
 
             // Finish if we've reached the max attempts
@@ -39,7 +39,7 @@ public static class ThrottleHelper
 
             // Delay the next attempt, doubling the duration of the delay each attempt (up to the max delay)
             delayMs *= 2;
-            await Task.Delay(Math.Min(delayMs, maxDelayMs)).ConfigureAwait(false);
+            await Task.Delay(Math.Min(delayMs, maxDelayMs));
         }
     }
 
@@ -59,6 +59,6 @@ public static class ThrottleHelper
             maxAttempts,
             int.CreateChecked(baseDelay.TotalMilliseconds),
             int.CreateChecked(maxDelay.TotalMilliseconds)
-        ).ConfigureAwait(false);
+        );
     }
 }

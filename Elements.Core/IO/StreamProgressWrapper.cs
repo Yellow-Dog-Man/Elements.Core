@@ -88,7 +88,7 @@ namespace Elements.Core
 
         public override async System.Threading.Tasks.Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
         {
-            var result = await innerStream.ReadAsync(buffer, offset, count, cancellationToken).ConfigureAwait(false);
+            var result = await innerStream.ReadAsync(buffer, offset, count, cancellationToken);
             UpdateProgress();
             return result;
         }
