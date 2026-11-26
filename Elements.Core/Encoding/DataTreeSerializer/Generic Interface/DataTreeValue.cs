@@ -7,10 +7,7 @@ namespace Elements.Core
 {
     public partial class DataTreeValue : DataTreeNode
     {
-        public override IEnumerable<DataTreeNode> EnumerateTree()
-        {
-            yield return this;
-        }
+        protected override IEnumerable<DataTreeNode> DirectChildren() => null;
 
         public IConvertible Value { get; private set; }
 
